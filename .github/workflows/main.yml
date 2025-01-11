@@ -25,13 +25,13 @@ jobs:
       - uses: pulumi/actions@v6
         with:
           command: preview
-          stack-name: pulumi-project/dev
+          stack-name: Acloud-rip/dev
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
 
       - uses: pulumi/actions@v6
         with:
           command: up
-          stack-name: pulumi-project/dev
+          stack-name: Acloud-rip/dev
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
