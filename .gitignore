@@ -1,0 +1,25 @@
+# Ignorar Google Cloud SDK y archivos grandes
+google-cloud-sdk/
+*.tar.gz
+
+# Ignorar archivos generados por Pulumi
+.pulumi/
+.pulumi.stacks/
+Pulumi.dev.yaml.backup
+Pulumi.prod.yaml.backup
+
+# Ignorar binarios de Go y archivos compilados
+*.exe
+*.dll
+*.so
+*.out
+*.o
+*.a
+
+# Archivos temporales y logs
+*.log
+*.tmp
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
