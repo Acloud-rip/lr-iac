@@ -16,7 +16,7 @@ jobs:
         uses: google-github-actions/auth@v2
         with:
           credentials_json: ${{ secrets.GCP_CREDENTIALS }}
-
+      # Set up the Cloud SDK with the project ID
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
         with:
