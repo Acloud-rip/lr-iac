@@ -1,13 +1,11 @@
-name: Pulumi CI/CD
+name: Pulumi Destroy
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch: # Esto permite ejecutarlo manualmente
 
 jobs:
-  deploy:
-    name: Deploy Infrastructure
+  destroy:
+    name: Destroy Infrastructure
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -22,10 +20,11 @@ jobs:
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
 
-      - uses: pulumi/actions@v3
+      - name: Destroy Pulumi
+        uses: pulumi/actions@v3
         with:
-          command: preview
-          stack-name: LuisRiosAcloud/pulumi-project/dev # When using an individual account, only use stack-name.
+          command: destroy
+          stack-name: LuisRiosAcloud/pulumi-project/dev
           work-dir: pulumi-project
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
