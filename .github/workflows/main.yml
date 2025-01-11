@@ -22,6 +22,8 @@ jobs:
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
 
+      - name: Go to Pulumi project directory
+        run: cd pulumi-project
       - uses: pulumi/actions@v3
         with:
           command: preview
