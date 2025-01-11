@@ -21,17 +21,32 @@ jobs:
         uses: google-github-actions/setup-gcloud@v2
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
-
-      - uses: pulumi/actions@v6
+      # Validar cambios con Pulumi Preview
+      - name: Preview Pulumi Changes
+        uses: pulumi/actions@v3
         with:
           command: preview
-          stack-name: Acloud-rip/dev
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
 
-      - uses: pulumi/actions@v6
+      # Desplegar cambios con Pulumi Up
+      - name: Deploy with Pulumi
+        uses: pulumi/actions@v3
         with:
           command: up
-          stack-name: Acloud-rip/dev
+          args: --yes
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+      # - uses: pulumi/actions@v6
+      #   with:
+      #     command: preview
+      #     stack-name: Acloud-rip/dev
+      #   env:
+      #     PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+
+      # - uses: pulumi/actions@v6
+      #   with:
+      #     command: up
+      #     stack-name: Acloud-rip/dev
+      #   env:
+      #     PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
