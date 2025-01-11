@@ -4,74 +4,34 @@ on:
   push:
     branches:
       - main
-  # Opcional: Añadir trigger manual
-  workflow_dispatch:
-
-# Establecer permisos necesarios para OIDC
-permissions:
-  id-token: write
-  contents: read
 
 jobs:
   deploy:
     name: Deploy Infrastructure
     runs-on: ubuntu-latest
-
     steps:
-      # 1. Configurar el repositorio
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      # 2. Configurar Go
-      - name: Set up Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: "1.22"
-          cache: true
-
-      # 3. Configurar Pulumi
-      - name: Set up Pulumi
-        uses: pulumi/actions@v5
-        with:
-          command: up
-          stack-name: dev
-          work-dir: ./ # Cambia esto si el código de Pulumi está en un subdirectorio
-        env:
-          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
-
-      # 4. Autenticar con Google Cloud (usando Workload Identity Federation)
       - name: Authenticate with Google Cloud
         uses: google-github-actions/auth@v2
         with:
-          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
-          service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
 
-      # 5. Configurar Google Cloud CLI
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
 
-      # 6. Configurar el proyecto y la región en GCP
-      - name: Set Google Cloud Project and Region
-        run: |
-          gcloud config set compute/region ${{ secrets.GCP_REGION }}
-
-      # 7. Instalar dependencias (Go)
-      - name: Install dependencies
-        run: |
-          go mod download
-          go mod verify
-          go mod tidy
-
-      # 8. Preview de cambios (opcional)
-      - name: Pulumi Preview
-        run: pulumi preview
+      - uses: pulumi/actions@v6
+        with:
+          command: preview
+          stack-name: dev
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
 
-      # 9. Desplegar infraestructura con Pulumi
-      - name: Pulumi Up
-        run: pulumi up --yes
+      - uses: pulumi/actions@v6
+        with:
+          command: up
+          stack-name: dev
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
