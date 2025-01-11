@@ -1,0 +1,25 @@
+{
+  "name": "Pulumi Go Dev Environment",
+  "image": "mcr.microsoft.com/devcontainers/go:1.20",  // Imagen base para Go
+  "features": {
+    "ghcr.io/devcontainers/features/gcloud:1": {       // Instala Google Cloud CLI
+      "version": "latest"
+    },
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {} // Habilita Docker si necesitas Kubernetes
+  },
+  "postCreateCommand": "go mod tidy && go install github.com/pulumi/pulumi/sdk/v3/go/pulumi@latest", // Instala Pulumi Go SDK
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "go.gopath": "/go",
+        "go.useLanguageServer": true
+      },
+      "extensions": [
+        "golang.go",                                       // Extensión de Go para VSCode
+        "pulumi.pulumi"                                    // Extensión de Pulumi
+      ]
+    }
+  },
+  "forwardPorts": [],
+  "remoteUser": "vscode"                                   // Usuario remoto predeterminado
+}
